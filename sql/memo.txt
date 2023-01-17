@@ -1,0 +1,7 @@
+https://devhints.io/mysql
+https://wiki.archlinux.org/title/JDBC_and_MySQL
+mysql -u user -p db;
+password
+
+SETUP SQL
+sudo mysql -u root -p < configure_db.sql;
