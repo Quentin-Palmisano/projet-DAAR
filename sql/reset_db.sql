@@ -1,2 +1,2 @@
-DROP USER 'user'@'localhost';
-DROP DATABASE db;
+DROP USER 'daar'@'localhost';
+DROP DATABASE daar;

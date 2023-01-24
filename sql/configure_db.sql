@@ -1,6 +1,6 @@
-CREATE USER 'user'@'localhost';
-GRANT ALL PRIVILEGES ON db.* TO 'user'@'localhost' IDENTIFIED BY 'password';
+CREATE USER 'daar'@'localhost';
+GRANT ALL PRIVILEGES ON daar.* TO 'daar'@'localhost' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
-CREATE DATABASE db CHARACTER SET utf8;
-USE db;
+CREATE DATABASE daar CHARACTER SET utf8;
+USE daar;
 
