@@ -24,24 +24,7 @@
 			}
 			%>
 			
-			<h2 class="">Trade</h2>
-			
-				<div>
-					<form method="post" action="/">
-						<div class="form-group">
-						    <label for="login-user">Username</label>
-						    <input type="text" class="form-control" id="login-user" name="user" placeholder="Enter username">
-						</div>
-						<div class="form-group">
-						    <label for="login-pass">Password</label>
-						    <input type="password" class="form-control" id="login-pass" name="pass" placeholder="Enter password">
-						</div>
-						<div class="row">
-			  				<button type="submit" name="action" value="login" class="logbutton btn btn-primary col-md-6 align-middle">Login</button>
-			  				<button type="submit" name="action" value="signup" class="logbutton btn btn-primary col-md-6 align-middle">Sign up</button>
-		  				</div>
-					</form>
-				</div>
+			<h2 class="">Projet DAAR</h2>
 			
 			
 		</div>
