@@ -3,9 +3,7 @@ package database;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class parseLivre {
 
@@ -65,8 +63,9 @@ public class parseLivre {
 			livre.updateLivre();
 			livre.insertAllOccurences();
 			System.out.println(i++);
+			System.out.println(livre.Id);
 		}
-		catch(IOException e) {
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -83,7 +82,7 @@ public class parseLivre {
 
 		File folder = new File("./books");
 		readFolder(folder);
-
+		//4694 3841 74 890 1250
 	}
 
 }

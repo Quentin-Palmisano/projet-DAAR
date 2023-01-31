@@ -2,7 +2,6 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,70 +20,56 @@ public class Livre {
 		result += "Author: " + Author + "\n";
 		result += "Release Date: " + Date + "\n";
 		result += "Language: " + Language + "\n";
-		return result;		
+		return result;	
 	}
 
-	public void insertLivre() {
-		try {
+	public void insertLivre() throws Exception {
 
-			Connection con = ConnectionProvider.getCon();
+		Connection con = ConnectionProvider.getCon();
 
-			PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Livre (Id, Titre, Author, Date, Language) VALUES (?,?,?,?,?)");
-			ps.setString(1, Id);
-			ps.setString(2, Titre);
-			ps.setString(3, Author);
-			ps.setString(4, Date);
-			ps.setString(5, Language);
+		PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Livre (Id, Titre, Author, Date, Language) VALUES (?,?,?,?,?)");
+		ps.setString(1, Id);
+		ps.setString(2, Titre);
+		ps.setString(3, Author);
+		ps.setString(4, Date);
+		ps.setString(5, Language);
 
-			ps.execute();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		ps.execute();
+		
 	}
 
-	public void updateLivre() {
-		try {
+	public void updateLivre() throws Exception {
 
-			Connection con = ConnectionProvider.getCon();
+		Connection con = ConnectionProvider.getCon();
 
-			PreparedStatement ps=con.prepareStatement("UPDATE Livre SET Titre=?,Author=?,Date=?,Language=? WHERE Id=?");
-			ps.setString(1, Titre);
-			ps.setString(2, Author);
-			ps.setString(3, Date);
-			ps.setString(4, Language);
-			ps.setString(5, Id);
+		PreparedStatement ps=con.prepareStatement("UPDATE Livre SET Titre=?,Author=?,Date=?,Language=? WHERE Id=?");
+		ps.setString(1, Titre);
+		ps.setString(2, Author);
+		ps.setString(3, Date);
+		ps.setString(4, Language);
+		ps.setString(5, Id);
 
-			ps.execute();
+		ps.execute();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	public void insertOccurence(String mot, Integer count) {
-		try {
+	public void insertAllOccurences() throws Exception {
+		
+		Connection con = ConnectionProvider.getCon();
 
-			Connection con = ConnectionProvider.getCon();
-
-			PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Occurence (Id, Mot, Count) VALUES (?,?,?)");
-			ps.setString(1, Id);
-			ps.setString(2, mot);
-			ps.setLong(3, count);
-
-			ps.execute();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void insertAllOccurences() {
+		PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Occurence (Id, Mot, Count) VALUES (?,?,?)");
+		
 		for(Map.Entry<String, Integer> entry : counter.entrySet()) {
 		    String mot = entry.getKey();
 		    Integer count = entry.getValue();
-		    insertOccurence(mot, count);
+		    ps.setString(1, Id);
+			ps.setString(2, mot);
+			ps.setLong(3, count);
+			ps.addBatch();
+			
 		}
+		
+		ps.executeBatch();
 	}
 
 
