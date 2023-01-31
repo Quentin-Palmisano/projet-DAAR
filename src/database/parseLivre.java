@@ -95,8 +95,8 @@ public class parseLivre {
 		    String Id = entry.getKey();
 		    Livre livre = entry.getValue();
 		    
-			livre.updateLivre();			
-			System.out.println("Book " + Id + " has been updated in the DB");		  
+			livre.updateLivre();
+			System.out.println("Book " + Id + " has been updated in the DB");
 		}
 		System.out.println("All books have been updated in the DB");
 	}

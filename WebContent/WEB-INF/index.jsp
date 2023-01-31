@@ -32,12 +32,12 @@
 
 		<h2 class="">Projet DAAR</h2>
 
-		<form action="" method="get" class="form">
+		<form action="" method="post" class="form">
 			<input type="radio" id="keyword" name="type" value="keyword" checked>
 			<label for="html">keyword</label><br>
 			<input type="radio" id="regex" name="type" value="regex">
 			<label for="html">regex</label><br>
-			<input type="text" id="fname" name=keyword placeholder="recherche"><br> 
+			<input type="text" id="fname" name="keywords" placeholder="recherche"><br> 
 			<input type="submit" value="Submit">
 		</form>
 

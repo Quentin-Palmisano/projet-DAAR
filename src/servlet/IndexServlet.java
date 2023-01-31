@@ -30,4 +30,21 @@ public class IndexServlet extends HttpServlet {
 		
 	}
 	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		try {
+			var type = request.getParameter("type");
+			var keywords = request.getParameter("keywords");
+			
+			request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			request.setAttribute("error", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+			
+		}
+		
+	}
+	
 }
