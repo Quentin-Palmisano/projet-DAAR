@@ -72,25 +72,26 @@ public class Livre {
 		}
 	}
 
-	public void insertOccurence(String mot, Integer count) {
-		try {
-			Connection con = ConnectionProvider.getCon();
-			PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Occurence (Id, Mot, Count) VALUES (?,?,?)");
-			ps.setString(1, Id);
-			ps.setString(2, mot);
-			ps.setLong(3, count);
-			ps.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	public void insertAllOccurences() {
+	public void insertAllOccurences() throws Exception {
+		
+		Connection con = ConnectionProvider.getCon();
+		PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Occurence (Id, Mot, Count) VALUES (?,?,?)");
+		
 		for(Map.Entry<String, Integer> entry : Counter.entrySet()) {
 		    String mot = entry.getKey();
 		    Integer count = entry.getValue();
-		    insertOccurence(mot, count);
+		    
+		    ps.setString(1, Id);
+			ps.setString(2, mot);
+			ps.setLong(3, count);
+			
+			ps.addBatch();
+			
 		}
+		
+		ps.executeBatch();
+		
 	}
 
 	

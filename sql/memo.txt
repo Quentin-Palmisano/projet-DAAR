@@ -4,6 +4,7 @@ mysql -u daar -p daar;
 password
 
 SETUP SQL
+sudo mysql -u root -p < reset_db.sql;
 sudo mysql -u root -p < configure_db.sql;
 
 
