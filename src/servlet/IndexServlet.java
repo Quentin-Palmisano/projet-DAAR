@@ -44,15 +44,13 @@ public class IndexServlet extends HttpServlet {
 		
 		Connection con = ConnectionProvider.getCon();
 		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
-				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot = \"?\" AND Occurence.Count > 0 ORDER BY Occurence.Count DESC;");
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ORDER BY Occurence.Count DESC;");
 		ps.setString(1, keywords);
 		ResultSet rs = ps.executeQuery();
-		
+
 		while(rs.next()) {
 			livres.add(new Livre(rs));
 		}
-		
-		System.out.println(livres.size());
 		
 		return livres;
 	}
