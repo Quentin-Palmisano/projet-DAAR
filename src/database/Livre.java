@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,7 +95,41 @@ public class Livre {
 		
 	}
 
+	public static ArrayList<Livre> searchKeywords(String keywords) throws Exception {
+		
+		String[] tab = keywords.split("\\W+");
+		ArrayList<Livre> livres = new ArrayList<>();
+		
+		Connection con = ConnectionProvider.getCon();
+		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ORDER BY Occurence.Count DESC;");
+		ps.setString(1, keywords);
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()) {
+			livres.add(new Livre(rs));
+		}
+		
+		return livres;
+	}
 	
+	public static ArrayList<Livre> searchRegex(String regex) throws Exception {
+		
+		ArrayList<Livre> livres = new ArrayList<>();
+		
+		Connection con = ConnectionProvider.getCon();
+		PreparedStatement ps=con.prepareStatement(
+				"SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre INNER JOIN Occurence "
+				+ "ON Occurence.Id=Livre.Id WHERE Occurence.Mot REGEXP ? AND Occurence.Count > 0 GROUP BY Livre.Id ORDER BY SUM(Occurence.Count) DESC;");
+		ps.setString(1, regex);
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()) {
+			livres.add(new Livre(rs));
+		}
+		
+		return livres;
+	}
 	
 	public String getId() {
 		return Id;
