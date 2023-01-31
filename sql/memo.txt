@@ -5,3 +5,8 @@ password
 
 SETUP SQL
 sudo mysql -u root -p < configure_db.sql;
+
+
+SHOW DATABASES;
+SHOW TABLES;
+SELECT * FROM Livre;

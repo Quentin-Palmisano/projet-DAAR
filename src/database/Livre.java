@@ -7,12 +7,21 @@ import java.util.Map;
 
 public class Livre {
 
-	public String Id;
-	public String Titre;
-	public String Author;
-	public String Date;
-	public String Language;
-	public HashMap<String, Integer> counter = new HashMap<String, Integer>();
+	private String Id;
+	private String Titre;
+	private String Author;
+	private String Date;
+	private String Language;
+	private HashMap<String, Integer> Counter;
+	
+	public Livre () {
+		this.Counter = new HashMap<String, Integer>();
+	}
+	
+	public Livre (String id) {
+		Id = id;
+		Counter = new HashMap<String, Integer>();
+	}
 
 	public String toString() {
 		String result = "Id: " + Id + "\n";
@@ -59,7 +68,8 @@ public class Livre {
 
 		PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Occurence (Id, Mot, Count) VALUES (?,?,?)");
 		
-		for(Map.Entry<String, Integer> entry : counter.entrySet()) {
+		for(Map.Entry<String, Integer> entry : Counter.entrySet()) {
+
 		    String mot = entry.getKey();
 		    Integer count = entry.getValue();
 		    ps.setString(1, Id);
@@ -72,5 +82,50 @@ public class Livre {
 		ps.executeBatch();
 	}
 
+	
+	
+	public String getId() {
+		return Id;
+	}
+
+	public void setId(String id) {
+		Id = id;
+	}
+
+	public String getTitre() {
+		return Titre;
+	}
+
+	public void setTitre(String titre) {
+		Titre = titre;
+	}
+
+	public String getAuthor() {
+		return Author;
+	}
+
+	public void setAuthor(String author) {
+		Author = author;
+	}
+
+	public String getDate() {
+		return Date;
+	}
+
+	public void setDate(String date) {
+		Date = date;
+	}
+
+	public String getLanguage() {
+		return Language;
+	}
+
+	public void setLanguage(String language) {
+		Language = language;
+	}
+
+	public HashMap<String, Integer> getCounter() {
+		return Counter;
+	}
 
 }
