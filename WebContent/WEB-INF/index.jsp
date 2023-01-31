@@ -1,3 +1,6 @@
+<%@ page import="database.*"%>
+<%@ page import="java.util.ArrayList"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,26 +23,65 @@
 	<div class="container">
 
 		<%
-			if(request.getAttribute("error") != null) {
-			%>
+		if(request.getAttribute("error") != null) {
+		%>
 
 		<div class="alert alert-danger" role="alert">
-			${requestScope.error}</div>
+			${requestScope.error}
+		</div>
 
 		<%
-			}
-			%>
+		}
+		%>
 
 		<h2 class="">Projet DAAR</h2>
 
 		<form action="" method="post" class="form">
-			<input type="radio" id="keyword" name="type" value="keyword" checked>
-			<label for="html">keyword</label><br>
-			<input type="radio" id="regex" name="type" value="regex">
-			<label for="html">regex</label><br>
-			<input type="text" id="fname" name="keywords" placeholder="recherche"><br> 
+			
+			<%
+			String option = "keyword";
+			if(request.getParameter("type") != null) {
+				option = request.getParameter("type");
+			}
+			%>
+			
+			<input type="radio" id="keyword" name="type" value="keyword" <%= option.equals("keyword")?"checked":"" %>>
+			<label for="html">Keywords</label><br>
+			<input type="radio" id="regex" name="type" value="regex" <%= option.equals("regex")?"checked":"" %>>
+			<label for="html">Regex</label><br>
+			
+			<%
+			String keywords = "";
+			if(request.getParameter("keywords") != null) {
+				keywords = request.getParameter("keywords");
+			}
+			%>
+			<input type="text" id="fname" name="keywords" placeholder="Recherche" value="<%= keywords %>"><br>
+			
 			<input type="submit" value="Submit">
 		</form>
+
+		<ul>
+			<%
+				var attr = request.getAttribute("livres");
+				if(attr != null && attr instanceof ArrayList<?>) {
+					var livres = (ArrayList<Livre>) attr;
+					for(Livre livre : livres) {
+			%>
+			
+			<li>
+				<div>Title : <%= livre.getTitre() %></div>
+				<div>Author : <%= livre.getAuthor() %></div>
+				<div>Language : <%= livre.getLanguage() %></div>
+			</li>
+
+			<%
+					}
+				}
+			%>
+			
+		</ul>
+		
 
 	</div>
 </body>

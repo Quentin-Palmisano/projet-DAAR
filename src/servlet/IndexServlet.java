@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import database.Livre;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,6 +38,9 @@ public class IndexServlet extends HttpServlet {
 			var type = request.getParameter("type");
 			var keywords = request.getParameter("keywords");
 			
+			
+			ArrayList<Livre> livres = new ArrayList<>();
+			request.setAttribute("livres", livres);
 			request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
