@@ -11,7 +11,7 @@ public class ConnectionProvider {
 	}
 	
 	public static Connection getCon() throws Exception {
-		if(con == null) {
+		if(con == null || con.isClosed()) {
 			connect();
 			if(con == null) throw new SQLException("Could not create SQL connection");
 		}
