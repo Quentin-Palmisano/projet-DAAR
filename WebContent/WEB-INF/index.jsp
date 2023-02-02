@@ -20,6 +20,7 @@
 <meta charset="utf-8">
 </head>
 <body>
+
 	<div class="container">
 
 		<%
@@ -58,25 +59,37 @@
 			%>
 			<input type="text" id="fname" name="keywords" placeholder="Recherche" value="<%= keywords %>"><br>
 			
+			<select name="tri" id="tri-select">
+		    <option value="occ">Nombre d'occurence</option>
+		    <option value="jacc">Jaccard</option>
+			</select>
+			
 			<input type="submit" value="Submit">
 		</form>
+		
+		<%
+			var attr = request.getAttribute("livres");
+			System.out.println(request.getAttribute("livres"));
+			var livres = new ArrayList<Livre>();
+			if(attr != null && attr instanceof ArrayList<?>) {
+				livres = (ArrayList<Livre>) attr;
+			}
+		%>
+		
+		<div><%= livres.size() %> résultat(s) trouvé(s)</div>
 
 		<ul>
 			<%
-				var attr = request.getAttribute("livres");
-				if(attr != null && attr instanceof ArrayList<?>) {
-					var livres = (ArrayList<Livre>) attr;
-					for(Livre livre : livres) {
+				for(Livre livre : livres) {
 			%>
 			
 			<li>
-				<div>Title : <%= livre.getTitre() %></div>
+				<div> <a href="<%= livre.getId() %>" >Title : <%= livre.getTitre() %></a></div>
 				<div>Author : <%= livre.getAuthor() %></div>
 				<div>Language : <%= livre.getLanguage() %></div>
 			</li>
 
 			<%
-					}
 				}
 			%>
 			

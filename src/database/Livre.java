@@ -95,7 +95,7 @@ public class Livre {
 		
 	}
 
-	public static ArrayList<Livre> searchKeywords(String keywords) throws Exception {
+	public static ArrayList<Livre> searchKeywords(String keywords, String tri) throws Exception {
 		
 		String[] tab = keywords.split("\\W+");
 		ArrayList<Livre> livres = new ArrayList<>();
@@ -110,10 +110,16 @@ public class Livre {
 			livres.add(new Livre(rs));
 		}
 		
+		if(tri.equals("occ")){
+			livres = triOccurence(livres);
+		}else if(tri.equals("jacc")){
+			livres = triJaccard(livres);
+		}
+		
 		return livres;
 	}
 	
-	public static ArrayList<Livre> searchRegex(String regex) throws Exception {
+	public static ArrayList<Livre> searchRegex(String regex, String tri) throws Exception {
 		
 		ArrayList<Livre> livres = new ArrayList<>();
 		
@@ -128,7 +134,25 @@ public class Livre {
 			livres.add(new Livre(rs));
 		}
 		
+		if(tri.equals("occ")){
+			livres = triOccurence(livres);
+		}else if(tri.equals("jacc")){
+			livres = triJaccard(livres);
+		}
+		
 		return livres;
+	}
+	
+	public static ArrayList<Livre> triOccurence(ArrayList<Livre> l) {
+		ArrayList<Livre> result = new ArrayList<Livre>();
+		
+		return l;
+	}
+	
+	public static ArrayList<Livre> triJaccard(ArrayList<Livre> l) {
+		ArrayList<Livre> result = new ArrayList<Livre>();
+		
+		return l;
 	}
 	
 	public String getId() {

@@ -42,19 +42,19 @@ public class IndexServlet extends HttpServlet {
 		try {
 			var type = request.getParameter("type");
 			var keywords = request.getParameter("keywords");
+			var tri = request.getParameter("tri");
 			
 			if(type.equals("keyword")) {
 				
-				ArrayList<Livre> livres = Livre.searchKeywords(keywords);
+				ArrayList<Livre> livres = Livre.searchKeywords(keywords, tri);
 				request.setAttribute("livres", livres);
 				
 			}else if(type.equals("regex")) {
 				
-				ArrayList<Livre> livres = Livre.searchRegex(keywords);
+				ArrayList<Livre> livres = Livre.searchRegex(keywords, tri);
 				request.setAttribute("livres", livres);
 				
 			}
-			
 
 			request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 		} catch (Exception e) {
