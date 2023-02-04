@@ -97,13 +97,46 @@ public class Livre {
 
 	public static ArrayList<Livre> searchKeywords(String keywords, String tri) throws Exception {
 		
-		String[] tab = keywords.split("\\W+");
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
 		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
 				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ORDER BY Occurence.Count DESC;");
 		ps.setString(1, keywords);
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()) {
+			livres.add(new Livre(rs));
+		}
+		
+		if(tri.equals("occ")){
+			livres = triOccurence(livres);
+		}else if(tri.equals("jacc")){
+			livres = triJaccard(livres);
+		}
+		
+		return livres;
+	}
+	
+public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String tri) throws Exception {
+		
+		ArrayList<Livre> livres = new ArrayList<>();
+		
+		Connection con = ConnectionProvider.getCon();
+		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ";
+		for(int i=0; i<keywords.size()-1; i++) {
+			requete += "OR Occurence.Mot=? AND Occurence.Count > 0 ";
+		}
+		requete += "ORDER BY Occurence.Count DESC;";
+		
+		PreparedStatement ps=con.prepareStatement(requete);
+		
+		int i = 1;
+		for(String s : keywords) {
+			ps.setString(i++, s);
+		}
+		
 		ResultSet rs = ps.executeQuery();
 
 		while(rs.next()) {
