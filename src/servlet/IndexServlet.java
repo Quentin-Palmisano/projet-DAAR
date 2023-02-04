@@ -22,16 +22,6 @@ public class IndexServlet extends HttpServlet {
     public IndexServlet() {
         super();
     }
-    
-    public static boolean isThere2words(String[] tab) {
-    	boolean b = false;
-    	
-    	if(b) {
-    		
-    	}
-    	
-    	return false;
-    }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -54,6 +44,11 @@ public class IndexServlet extends HttpServlet {
 			var keywords = request.getParameter("keywords");
 			var tri = request.getParameter("tri");
 			
+			if(type == null || keywords == null || keywords.isBlank() || tri == null) {
+				request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+				return;
+			}
+			
 			ArrayList<Livre> livres;
 			
 			if(type.equals("keyword")) {
@@ -69,7 +64,7 @@ public class IndexServlet extends HttpServlet {
 				}
 				
 				
-			}else if(type.equals("regex")) {
+			} else if(type.equals("regex")) {
 				
 				livres = Livre.searchRegex(keywords, tri);
 				request.setAttribute("livres", livres);

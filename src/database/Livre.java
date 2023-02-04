@@ -103,7 +103,7 @@ public class Livre {
 		
 		Connection con = ConnectionProvider.getCon();
 		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
-				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 " + getOrder(tri) + ";");
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 GROUP BY Livre.Id " + getOrder(tri) + ";");
 		ps.setString(1, keywords);
 		ResultSet rs = ps.executeQuery();
 
@@ -124,7 +124,7 @@ public class Livre {
 		for(int i=1; i<keywords.size()-1; i++) {
 			requete += "OR Occurence.Mot=? ";
 		}
-		requete += ") " + getOrder(tri) + ";";
+		requete += ") GROUP BY Livre.Id " + getOrder(tri) + ";";
 		
 		PreparedStatement ps=con.prepareStatement(requete);
 		
