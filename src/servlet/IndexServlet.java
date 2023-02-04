@@ -91,8 +91,9 @@ public class IndexServlet extends HttpServlet {
 		ArrayList<String> res = new ArrayList<String>();
 		String tab[] = s.split(" ");
 		for(String str : tab) {
-			if(!str.equals(" ")) {
+			if(!str.equals(" ") && !str.equals("")) {
 				res.add(str);
+				System.out.println(str);
 			}
 		}
 		
