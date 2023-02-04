@@ -38,32 +38,18 @@ public class LivreServlet extends HttpServlet {
 		try {
 			var id = request.getParameter("id");
 			
-			Connection con = ConnectionProvider.getCon();
-			PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
-					+ "WHERE Livre.Id=?;");
-			ps.setString(1, id);
-			ResultSet rs = ps.executeQuery();
-			
-			Livre livre = new Livre();
-			rs.next();
-			livre = new Livre(rs);
+			var livre = Livre.get(Integer.parseInt(id));
 			
 			request.setAttribute("livre", livre);
+			
+			var suggestions = livre.getSuggestions();
+			
+			request.setAttribute("suggestions", suggestions);
+			
+			var text = livre.getText(getServletContext());
+			
+			request.setAttribute("text", text);
 
-			request.getRequestDispatcher("/WEB-INF/livre.jsp").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			request.setAttribute("error", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/livre.jsp").forward(request, response);
-			
-		}
-		
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		try {
 			request.getRequestDispatcher("/WEB-INF/livre.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

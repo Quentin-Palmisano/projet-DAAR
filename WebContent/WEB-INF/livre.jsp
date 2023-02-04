@@ -1,10 +1,18 @@
 <%@ page import="database.*"%>
 <%@ page import="java.util.ArrayList"%>
 
+<%
+	var attr = request.getAttribute("livre");
+	Livre livre = new Livre();
+	if(attr != null && attr instanceof Livre) {
+		livre = (Livre) attr;
+	}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>Livre</title>
+<title><%= livre.getTitre() %></title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -23,20 +31,49 @@
 
 	<div class="container">
 
-	<%
-		var attr = request.getAttribute("livre");
-		Livre livre = new Livre();
-		if(attr != null && attr instanceof Livre) {
-			livre = (Livre) attr;
-		}
-	%>
-
 		<h2 class=""><%= livre.getTitre() %></h2>
 
 		<div>Author : <%= livre.getAuthor() %></div>
 		<div>Date : <%= livre.getDate() %></div>
 		<div>Language : <%= livre.getLanguage() %></div>
+		
+		<%
+			var sugg = request.getAttribute("suggestions");
+			ArrayList<Livre> suggestions = new ArrayList<>();
+			if(sugg != null && sugg instanceof ArrayList<?>) {
+				suggestions = (ArrayList<Livre>) sugg;
+			}
+		%>
+		
+		<br/>
+		
+		<div>Suggestions :</div>
 
+		<ul>
+			<%
+				for(Livre suggestion : suggestions) {
+			%>
+			
+			<li>
+				<div> <a href="/Livre?id=<%= ""+suggestion.getId() %>" >Title : <%=suggestion.getTitre() %></a></div>
+				<div>Author : <%= suggestion.getAuthor() %></div>
+				<div>Language : <%= suggestion.getLanguage() %></div>
+			</li>
+
+			<%
+				}
+			%>
+			
+		</ul>
+		
+		<br/>
+		
+		<div>Book text :</div>
+		
+		<div>
+			<%= request.getAttribute("text") %>
+		</div>
+		
 	</div>
 </body>
 </html>

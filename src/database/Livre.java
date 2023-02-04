@@ -1,12 +1,19 @@
 package database;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import jakarta.annotation.Resources;
+import jakarta.servlet.ServletContext;
 
 public class Livre {
 
@@ -42,6 +49,19 @@ public class Livre {
 		result += "Release Date: " + Date + "\n";
 		result += "Language: " + Language + "\n";
 		return result;		
+	}
+	
+	public static Livre get(int id) throws Exception {
+		Connection con = ConnectionProvider.getCon();
+		
+		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
+				+ "WHERE Livre.Id=?;");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		
+		rs.next();
+		Livre livre = new Livre(rs);
+		return livre;
 	}
 
 	public void insertLivre() {
@@ -102,7 +122,7 @@ public class Livre {
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
-		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
+		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre "
 				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 GROUP BY Livre.Id " + getOrder(tri) + ";");
 		ps.setString(1, keywords);
 		ResultSet rs = ps.executeQuery();
@@ -119,7 +139,7 @@ public class Livre {
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
-		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
+		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre "
 				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Count > 0 AND (Occurence.Mot=? ";
 		for(int i=1; i<keywords.size()-1; i++) {
 			requete += "OR Occurence.Mot=? ";
@@ -168,6 +188,50 @@ public class Livre {
 			order = "ORDER BY Livre.Closeness DESC";
 		}
 		return order;
+	}
+	
+	public ArrayList<Livre> getSuggestions() throws Exception {
+		
+		ArrayList<Livre> livres = new ArrayList<>();
+		
+		Connection con = ConnectionProvider.getCon();
+		PreparedStatement ps=con.prepareStatement("SELECT l.Id, l.Titre, l.Author, l.Date, l.Language FROM Livre AS l "
+				+ "INNER JOIN Distance AS d ON (d.Id1=? AND d.Id2=l.Id) OR (d.Id2=? AND d.Id1=l.Id) ORDER BY d.Dist ASC LIMIT 10");
+		// pas besoin de parenthèses
+		ps.setInt(1, Id);
+		ps.setInt(2, Id);
+		
+		var rs = ps.executeQuery();
+		
+		while(rs.next()) {
+			livres.add(new Livre(rs));
+		}
+		
+		return livres;
+	}
+	
+	private static final String START = "***";
+	public String getText(ServletContext context) throws Exception {
+		StringBuilder text = new StringBuilder();
+		
+		var in = context.getResourceAsStream("/WEB-INF/books/"+Id+".txt");
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		
+		boolean started = false;
+		String line;
+		while((line = br.readLine()) != null) {
+			
+			if(!started && line.contains(START)) {
+				started = true;
+				continue;
+			}
+			
+			if(started) {
+				text.append(line + "<br/>");
+			}
+			
+		}
+		return text.toString();
 	}
 	
 	public int getId() {

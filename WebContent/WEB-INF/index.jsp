@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Projet</title>
+<title>Recherche</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -35,7 +35,7 @@
 		}
 		%>
 
-		<h2 class="">Projet DAAR</h2>
+		<h2 class="">Recherche de livres</h2>
 
 		<form action="" method="post" class="form">
 			
@@ -76,10 +76,8 @@
 		<%
 			var attr = request.getAttribute("livres");
 			/* System.out.println(request.getAttribute("livres")); */
-			var livres = new ArrayList<Livre>();
 			if(attr != null && attr instanceof ArrayList<?>) {
-				livres = (ArrayList<Livre>) attr;
-			}
+				var livres = (ArrayList<Livre>) attr;
 		%>
 		
 		<div><%= livres.size() %> résultat(s) trouvé(s)</div>
@@ -101,6 +99,9 @@
 			
 		</ul>
 		
+		<%
+			}
+		%>
 
 	</div>
 </body>

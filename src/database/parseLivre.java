@@ -22,7 +22,7 @@ public class parseLivre {
 
 	public static void readFile(File file) {
 		try {
-			FileReader fr = new FileReader(file);     
+			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String line;
 			boolean count = false;
