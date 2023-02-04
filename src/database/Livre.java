@@ -10,24 +10,25 @@ import java.util.Map;
 
 public class Livre {
 
-	private String Id;
+	private int Id;
 	private String Titre;
 	private String Author;
 	private String Date;
 	private String Language;
+	private double Closeness;
 	private HashMap<String, Integer> Counter;
 	
 	public Livre () {
 		this.Counter = new HashMap<String, Integer>();
 	}
 	
-	public Livre (String id) {
+	public Livre (int id) {
 		Id = id;
 		Counter = new HashMap<String, Integer>();
 	}
 
 	public Livre(ResultSet rs) throws Exception {
-		Id = rs.getString("Id");
+		Id = rs.getInt("Id");
 		Titre = rs.getString("Titre");
 		Author = rs.getString("Author");
 		Date = rs.getString("Date");
@@ -46,12 +47,13 @@ public class Livre {
 	public void insertLivre() {
 		try {
 			Connection con = ConnectionProvider.getCon();
-			PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Livre (Id, Titre, Author, Date, Language) VALUES (?,?,?,?,?)");
-			ps.setString(1, Id);
+			PreparedStatement ps=con.prepareStatement("INSERT IGNORE INTO Livre (Id, Titre, Author, Date, Language, Closeness) VALUES (?,?,?,?,?,?)");
+			ps.setInt(1, Id);
 			ps.setString(2, Titre);
 			ps.setString(3, Author);
 			ps.setString(4, Date);
 			ps.setString(5, Language);
+			ps.setDouble(6, Closeness);
 			ps.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +68,7 @@ public class Livre {
 			ps.setString(2, Author);
 			ps.setString(3, Date);
 			ps.setString(4, Language);
-			ps.setString(5, Id);
+			ps.setInt(5, Id);
 			ps.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +85,7 @@ public class Livre {
 		    String mot = entry.getKey();
 		    Integer count = entry.getValue();
 		    
-		    ps.setString(1, Id);
+		    ps.setInt(1, Id);
 			ps.setString(2, mot);
 			ps.setLong(3, count);
 			
@@ -110,11 +112,7 @@ public class Livre {
 			livres.add(new Livre(rs));
 		}
 		
-		if(tri.equals("occ")){
-			livres = triOccurence(livres);
-		}else if(tri.equals("jacc")){
-			livres = triJaccard(livres);
-		}
+		
 		
 		return livres;
 	}
@@ -134,32 +132,24 @@ public class Livre {
 			livres.add(new Livre(rs));
 		}
 		
-		if(tri.equals("occ")){
-			livres = triOccurence(livres);
-		}else if(tri.equals("jacc")){
-			livres = triJaccard(livres);
-		}
-		
 		return livres;
 	}
 	
-	public static ArrayList<Livre> triOccurence(ArrayList<Livre> l) {
-		ArrayList<Livre> result = new ArrayList<Livre>();
-		
-		return l;
+	private String getOrder(String tri) {
+		String order = "";
+		if(tri.equals("occ")) {
+			order = "ORDER BY Occurence.Count DESC";
+		}else if(tri.equals("jacc")){
+			order = "ORDER BY Occurence.Count DESC";
+		}
+		return order;
 	}
 	
-	public static ArrayList<Livre> triJaccard(ArrayList<Livre> l) {
-		ArrayList<Livre> result = new ArrayList<Livre>();
-		
-		return l;
-	}
-	
-	public String getId() {
+	public int getId() {
 		return Id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		Id = id;
 	}
 
@@ -193,6 +183,14 @@ public class Livre {
 
 	public void setLanguage(String language) {
 		Language = language;
+	}
+
+	public double getCloseness() {
+		return Closeness;
+	}
+
+	public void setCloseness(double closeness) {
+		Closeness = closeness;
 	}
 
 	public HashMap<String, Integer> getCounter() {
