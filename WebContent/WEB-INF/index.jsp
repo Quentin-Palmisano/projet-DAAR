@@ -59,9 +59,15 @@
 			%>
 			<input type="text" id="fname" name="keywords" placeholder="Recherche" value="<%= keywords %>"><br>
 			
+			<%
+			String selection = "occ";
+			if(request.getParameter("tri") != null) {
+				selection = request.getParameter("tri");
+			}
+			%>
 			<select name="tri" id="tri-select">
-		    <option value="occ">Nombre d'occurence</option>
-		    <option value="jacc">Jaccard</option>
+			    <option value="occ" <%= selection.equals("occ")?"selected='selected'":"" %>>Nombre d'occurence</option>
+			    <option value="jacc" <%= selection.equals("jacc")?"selected='selected'":"" %>>Jaccard</option>
 			</select>
 			
 			<input type="submit" value="Submit">
@@ -84,7 +90,7 @@
 			%>
 			
 			<li>
-				<div> <a href="/Livre?id=<%= livre.getId() %>" >Title : <%= livre.getTitre() %></a></div>
+				<div> <a href="/Livre?id=<%= ""+livre.getId() %>" >Title : <%=livre.getTitre() %></a></div>
 				<div>Author : <%= livre.getAuthor() %></div>
 				<div>Language : <%= livre.getLanguage() %></div>
 			</li>
