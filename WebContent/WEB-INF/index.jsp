@@ -67,7 +67,7 @@
 			%>
 			<select name="tri" id="tri-select">
 			    <option value="occ" <%= selection.equals("occ")?"selected='selected'":"" %>>Nombre d'occurence</option>
-			    <option value="jacc" <%= selection.equals("occ")?"selected='selected'":"" %>>Jaccard</option>
+			    <option value="jacc" <%= selection.equals("jacc")?"selected='selected'":"" %>>Jaccard</option>
 			</select>
 			
 			<input type="submit" value="Submit">
@@ -90,7 +90,7 @@
 			%>
 			
 			<li>
-				<div> <a href="<%= livre.getId() %>" >Title : <%= livre.getTitre() %></a></div>
+				<div> <a href="<%= livre.getId() %>" >Title : <%= "" + livre.getTitre() %></a></div>
 				<div>Author : <%= livre.getAuthor() %></div>
 				<div>Language : <%= livre.getLanguage() %></div>
 			</li>

@@ -111,22 +111,20 @@ public class Livre {
 			livres.add(new Livre(rs));
 		}
 		
-		
-		
 		return livres;
 	}
 	
-public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String tri) throws Exception {
+	public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String tri) throws Exception {
 		
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
-		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
-				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ";
-		for(int i=0; i<keywords.size()-1; i++) {
-			requete += "OR Occurence.Mot=? AND Occurence.Count > 0 ";
+		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre "
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Count > 0 AND (Occurence.Mot=? ";
+		for(int i=1; i<keywords.size()-1; i++) {
+			requete += "OR Occurence.Mot=? ";
 		}
-		requete += "ORDER BY Occurence.Count DESC;";
+		requete += ") " + getOrder(tri) + ";";
 		
 		PreparedStatement ps=con.prepareStatement(requete);
 		
@@ -141,12 +139,6 @@ public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String
 			livres.add(new Livre(rs));
 		}
 		
-		if(tri.equals("occ")){
-			livres = triOccurence(livres);
-		}else if(tri.equals("jacc")){
-			livres = triJaccard(livres);
-		}
-		
 		return livres;
 	}
 	
@@ -157,7 +149,7 @@ public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String
 		Connection con = ConnectionProvider.getCon();
 		PreparedStatement ps=con.prepareStatement(
 				"SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre INNER JOIN Occurence "
-				+ "ON Occurence.Id=Livre.Id WHERE Occurence.Mot REGEXP ? AND Occurence.Count > 0 GROUP BY Livre.Id ORDER BY SUM(Occurence.Count) DESC;");
+				+ "ON Occurence.Id=Livre.Id WHERE Occurence.Mot REGEXP ? AND Occurence.Count > 0 GROUP BY Livre.Id " + getOrder(tri) + ";");
 		ps.setString(1, regex);
 		ResultSet rs = ps.executeQuery();
 
@@ -168,12 +160,12 @@ public static ArrayList<Livre> searchKeywords(ArrayList<String> keywords, String
 		return livres;
 	}
 	
-	private String getOrder(String tri) {
+	private static String getOrder(String tri) {
 		String order = "";
 		if(tri.equals("occ")) {
-			order = "ORDER BY Occurence.Count DESC";
+			order = "ORDER BY SUM(Occurence.Count) DESC";
 		}else if(tri.equals("jacc")){
-			order = "ORDER BY Occurence.Count DESC";
+			order = "ORDER BY Livre.Closeness DESC";
 		}
 		return order;
 	}
