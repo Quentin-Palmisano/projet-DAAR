@@ -93,7 +93,6 @@ public class IndexServlet extends HttpServlet {
 		for(String str : tab) {
 			if(!str.equals(" ") && !str.equals("")) {
 				res.add(str);
-				System.out.println(str);
 			}
 		}
 		

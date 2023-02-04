@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
+<title>Projet</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -75,7 +75,7 @@
 		
 		<%
 			var attr = request.getAttribute("livres");
-			System.out.println(request.getAttribute("livres"));
+			/* System.out.println(request.getAttribute("livres")); */
 			var livres = new ArrayList<Livre>();
 			if(attr != null && attr instanceof ArrayList<?>) {
 				livres = (ArrayList<Livre>) attr;
@@ -90,7 +90,7 @@
 			%>
 			
 			<li>
-				<div> <a href="<%= livre.getId() %>" >Title : <%= "" + livre.getTitre() %></a></div>
+				<div> <a href="/Livre?id=<%= ""+livre.getId() %>" >Title : <%=livre.getTitre() %></a></div>
 				<div>Author : <%= livre.getAuthor() %></div>
 				<div>Language : <%= livre.getLanguage() %></div>
 			</li>
