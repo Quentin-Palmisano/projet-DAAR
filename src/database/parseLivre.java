@@ -16,7 +16,7 @@ public class parseLivre {
 	private static final String LANGUAGE = "Language: ";
 	private static final String START = "***";
 
-	static final int maxFiles = -1; // 0 is all books
+	static final int maxFiles = -1;
 	
 	private static HashMap<Integer, Livre> data = new HashMap<>();
 
@@ -39,7 +39,8 @@ public class parseLivre {
 				count = true;
 
 				if(line.length() > TITRE.length() && TITRE.equals(line.substring(0, TITRE.length()))){
-					livre.setTitre(line.substring(TITRE.length()));
+					String titre = line.substring(TITRE.length()) + " " + br.readLine().strip();
+					livre.setTitre(titre);
 				}else if(line.length() > AUTHOR.length() && AUTHOR.equals(line.substring(0, AUTHOR.length()))){
 					livre.setAuthor(line.substring(AUTHOR.length()));
 				}else if(line.length() > DATE.length() && DATE.equals(line.substring(0, DATE.length()))){

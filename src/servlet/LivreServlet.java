@@ -22,16 +22,6 @@ public class LivreServlet extends HttpServlet {
     public LivreServlet() {
         super();
     }
-    
-    public static boolean isThere2words(String[] tab) {
-    	boolean b = false;
-    	
-    	if(b) {
-    		
-    	}
-    	
-    	return false;
-    }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
