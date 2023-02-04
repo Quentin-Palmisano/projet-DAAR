@@ -16,7 +16,7 @@ public class parseLivre {
 	private static final String LANGUAGE = "Language: ";
 	private static final String START = "***";
 
-	static final int maxFiles = 100; // 0 is all books
+	static final int maxFiles = -1; // 0 is all books
 	
 	private static HashMap<Integer, Livre> data = new HashMap<>();
 
