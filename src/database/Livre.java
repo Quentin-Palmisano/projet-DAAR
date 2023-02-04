@@ -102,8 +102,8 @@ public class Livre {
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
-		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, Occurence.Count FROM Livre "
-				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 ORDER BY Occurence.Count DESC;");
+		PreparedStatement ps=con.prepareStatement("SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
+				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Mot=? AND Occurence.Count > 0 " + getOrder(tri) + ";");
 		ps.setString(1, keywords);
 		ResultSet rs = ps.executeQuery();
 
@@ -119,7 +119,7 @@ public class Livre {
 		ArrayList<Livre> livres = new ArrayList<>();
 		
 		Connection con = ConnectionProvider.getCon();
-		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language, SUM(Occurence.Count) FROM Livre "
+		String requete = "SELECT Livre.Id, Livre.Titre, Livre.Author, Livre.Date, Livre.Language FROM Livre "
 				+ "INNER JOIN Occurence ON Occurence.Id=Livre.Id WHERE Occurence.Count > 0 AND (Occurence.Mot=? ";
 		for(int i=1; i<keywords.size()-1; i++) {
 			requete += "OR Occurence.Mot=? ";
