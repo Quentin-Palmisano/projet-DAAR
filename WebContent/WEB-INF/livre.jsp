@@ -34,6 +34,7 @@
 		<h2 class=""><%= livre.getTitre() %></h2>
 
 		<div>Author : <%= livre.getAuthor() %></div>
+		<div>Date : <%= livre.getDate() %></div>
 		<div>Language : <%= livre.getLanguage() %></div>
 
 	</div>

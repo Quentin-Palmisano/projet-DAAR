@@ -45,12 +45,8 @@ public class LivreServlet extends HttpServlet {
 			ResultSet rs = ps.executeQuery();
 			
 			Livre livre = new Livre();
-			
-			while(rs.next()) {
-				if(rs.getString("Id")!=null) {
-					livre = new Livre(rs);
-				}
-			}
+			rs.next();
+			livre = new Livre(rs);
 			
 			request.setAttribute("livre", livre);
 
